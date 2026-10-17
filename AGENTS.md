@@ -8,3 +8,7 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- All content reads go through `src/lib/repository.ts`; swap its internals for a backend later without touching UI. Why: single integration point.
+- All user-facing strings are `Localized` ({hy,en,ru}) and rendered via `useI18n()`; Armenian is default. Why: trilingual site.
+- Content items carry `status: "draft" | "verified"`; drafts must render `DraftBadge`. Why: no unverified claims shown as fact.
