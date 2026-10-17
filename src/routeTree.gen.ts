@@ -10,33 +10,80 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as SettlementsRouteImport } from './routes/settlements'
+import { Route as TreasuresIndexRouteImport } from './routes/treasures.index'
+import { Route as TreasuresSlugRouteImport } from './routes/treasures.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettlementsRoute = SettlementsRouteImport.update({
+  id: '/settlements',
+  path: '/settlements',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TreasuresIndexRoute = TreasuresIndexRouteImport.update({
+  id: '/treasures/',
+  path: '/treasures/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TreasuresSlugRoute = TreasuresSlugRouteImport.update({
+  id: '/treasures/$slug',
+  path: '/treasures/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/settlements': typeof SettlementsRoute
+  '/treasures/$slug': typeof TreasuresSlugRoute
+  '/treasures/': typeof TreasuresIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/settlements': typeof SettlementsRoute
+  '/treasures/$slug': typeof TreasuresSlugRoute
+  '/treasures': typeof TreasuresIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/settlements': typeof SettlementsRoute
+  '/treasures/$slug': typeof TreasuresSlugRoute
+  '/treasures/': typeof TreasuresIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    '/' | '/about' | '/settlements' | '/treasures/$slug' | '/treasures/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/about' | '/settlements' | '/treasures/$slug' | '/treasures'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/settlements'
+    | '/treasures/$slug'
+    | '/treasures/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  SettlementsRoute: typeof SettlementsRoute
+  TreasuresSlugRoute: typeof TreasuresSlugRoute
+  TreasuresIndexRoute: typeof TreasuresIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +95,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settlements': {
+      id: '/settlements'
+      path: '/settlements'
+      fullPath: '/settlements'
+      preLoaderRoute: typeof SettlementsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/treasures/': {
+      id: '/treasures/'
+      path: '/treasures'
+      fullPath: '/treasures/'
+      preLoaderRoute: typeof TreasuresIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/treasures/$slug': {
+      id: '/treasures/$slug'
+      path: '/treasures/$slug'
+      fullPath: '/treasures/$slug'
+      preLoaderRoute: typeof TreasuresSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  SettlementsRoute: SettlementsRoute,
+  TreasuresSlugRoute: TreasuresSlugRoute,
+  TreasuresIndexRoute: TreasuresIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
