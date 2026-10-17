@@ -1,11 +1,13 @@
 import type { Localized } from "@/lib/i18n";
 
-/** status "draft" = example placeholder, must be shown with a draft label. */
+/** "draft" = example placeholder; must always be shown with a draft label. */
 export type ContentStatus = "draft" | "verified";
+export type ImageKey = "vordan-karmir" | "biodiversity" | "landscapes" | "traditions" | "green" | "awareness";
 
 export interface Treasure {
   slug: string;
   status: ContentStatus;
+  image: ImageKey;
   category: Localized;
   title: Localized;
   summary: Localized;
@@ -19,62 +21,97 @@ export interface Settlement {
   name: Localized;
 }
 
-// EXAMPLE CONTENT ONLY — no locations, figures or contacts are claimed.
+const PENDING: Localized = {
+  hy: "Այս բաժնի վերջնական տեքստը կպատրաստվի ստուգված աղբյուրների և մասնագետների հետ համագործակցությամբ։ Հստակ վայրեր, թվեր կամ պատմական փաստեր այստեղ դեռ չեն ներկայացվում։",
+  en: "Final text for this topic will be prepared with verified sources and experts. No exact locations, figures or historical claims are presented here yet.",
+  ru: "Окончательный текст по этой теме будет подготовлен по проверенным источникам совместно со специалистами. Точные места, цифры и исторические сведения пока не приводятся.",
+};
+
+// EXAMPLE TOPICS ONLY — all drafts until verified.
 export const TREASURES: Treasure[] = [
   {
-    slug: "wetland-birds",
+    slug: "vordan-karmir",
     status: "draft",
-    category: { hy: "Կենդանական աշխարհ", en: "Wildlife", ru: "Животный мир" },
-    title: { hy: "Ջրաճահճային թռչուններ", en: "Wetland birds", ru: "Птицы водно-болотных угодий" },
+    image: "vordan-karmir",
+    category: { hy: "Բնական ժառանգություն", en: "Natural heritage", ru: "Природное наследие" },
+    title: { hy: "Որդան կարմիր", en: "Vordan Karmir", ru: "Вордан кармир" },
     summary: {
-      hy: "Օրինակային քարտ՝ ջրային միջավայրի թռչունների մասին։",
-      en: "Example card about birds of wet habitats.",
-      ru: "Пример карточки о птицах влажных местообитаний.",
+      hy: "Հայկական որդան կարմիրը և նրա հետ կապված բնական ու մշակութային պատմությունը։",
+      en: "The Armenian cochineal and the natural and cultural story connected to it.",
+      ru: "Армянская кошениль и связанная с ней природная и культурная история.",
     },
-    body: {
-      hy: "Սա տեղապահ տեքստ է։ Վերջնական բովանդակությունը կտրամադրվի մասնագետների կողմից ստուգվելուց հետո։",
-      en: "This is placeholder text. Final content will be provided after expert verification.",
-      ru: "Это текст-заглушка. Окончательный материал появится после проверки специалистами.",
-    },
+    body: PENDING,
   },
   {
-    slug: "riverside-trees",
+    slug: "native-species",
     status: "draft",
-    category: { hy: "Բուսական աշխարհ", en: "Flora", ru: "Растительный мир" },
-    title: { hy: "Գետափնյա ծառեր", en: "Riverside trees", ru: "Прибрежные деревья" },
+    image: "biodiversity",
+    category: { hy: "Կենսաբազմազանություն", en: "Biodiversity", ru: "Биоразнообразие" },
+    title: { hy: "Տեղական տեսակներ", en: "Native species", ru: "Местные виды" },
     summary: {
-      hy: "Օրինակային քարտ՝ գետափնյա բուսականության մասին։",
-      en: "Example card about riparian vegetation.",
-      ru: "Пример карточки о прибрежной растительности.",
+      hy: "Բույսերի, միջատների և թռչունների բազմազանությունը որպես համայնքի հարստություն։",
+      en: "Plants, insects and birds as part of the community’s living wealth.",
+      ru: "Растения, насекомые и птицы как живое богатство общины.",
     },
-    body: {
-      hy: "Տեղապահ տեքստ։ Տեսակները և նկարագրությունները դեռ չեն հաստատվել։",
-      en: "Placeholder text. Species and descriptions are not yet confirmed.",
-      ru: "Текст-заглушка. Виды и описания ещё не подтверждены.",
-    },
+    body: PENDING,
   },
   {
-    slug: "spring-wildflowers",
+    slug: "landscapes",
     status: "draft",
-    category: { hy: "Բուսական աշխարհ", en: "Flora", ru: "Растительный мир" },
-    title: { hy: "Գարնանային վայրի ծաղիկներ", en: "Spring wildflowers", ru: "Весенние полевые цветы" },
+    image: "landscapes",
+    category: { hy: "Բնապատկեր", en: "Landscapes", ru: "Ландшафты" },
+    title: { hy: "Դաշտավայրի բնապատկերներ", en: "Valley landscapes", ru: "Пейзажи долины" },
     summary: {
-      hy: "Օրինակային քարտ՝ սեզոնային ծաղկման մասին։",
-      en: "Example card about seasonal blooming.",
-      ru: "Пример карточки о сезонном цветении.",
+      hy: "Լույս, ջուր և հորիզոն՝ բնապատկերներ, որոնք ձևավորում են տեղի դիմագիծը։",
+      en: "Light, water and horizon — the landscapes that shape the place’s character.",
+      ru: "Свет, вода и горизонт — пейзажи, формирующие облик места.",
     },
-    body: {
-      hy: "Տեղապահ տեքստ։ Կլրացվի ստուգված տվյալներով։",
-      en: "Placeholder text. To be completed with verified information.",
-      ru: "Текст-заглушка. Будет дополнен проверенными данными.",
+    body: PENDING,
+  },
+  {
+    slug: "traditions",
+    status: "draft",
+    image: "traditions",
+    category: { hy: "Մշակութային ժառանգություն", en: "Cultural heritage", ru: "Культурное наследие" },
+    title: { hy: "Ավանդույթներ և արհեստներ", en: "Traditions and crafts", ru: "Традиции и ремёсла" },
+    summary: {
+      hy: "Մարդու և բնության կապը՝ ավանդույթների ու ձեռարվեստի միջոցով։",
+      en: "The bond between people and nature, carried through traditions and crafts.",
+      ru: "Связь человека и природы через традиции и ремёсла.",
     },
+    body: PENDING,
+  },
+  {
+    slug: "green-spaces",
+    status: "draft",
+    image: "green",
+    category: { hy: "Կանաչ տարածքներ", en: "Green spaces", ru: "Зелёные зоны" },
+    title: { hy: "Կանաչ տարածքներ", en: "Green spaces", ru: "Зелёные пространства" },
+    summary: {
+      hy: "Այգիներ և ծառուղիներ՝ որպես առօրյա կյանքի և առողջ միջավայրի մաս։",
+      en: "Parks and tree-lined paths as part of daily life and a healthy environment.",
+      ru: "Парки и аллеи как часть повседневной жизни и здоровой среды.",
+    },
+    body: PENDING,
+  },
+  {
+    slug: "community-action",
+    status: "draft",
+    image: "awareness",
+    category: { hy: "Բնապահպանական իրազեկում", en: "Environmental awareness", ru: "Экологическое просвещение" },
+    title: { hy: "Համայնքային նախաձեռնություններ", en: "Community initiatives", ru: "Инициативы общины" },
+    summary: {
+      hy: "Ինչպես կարող ենք միասին հոգ տանել շրջակա միջավայրի մասին։",
+      en: "How we can take care of our environment together.",
+      ru: "Как мы можем вместе заботиться об окружающей среде.",
+    },
+    body: PENDING,
   },
 ];
 
 /**
- * Only settlements currently part of Metsamor Community belong here.
- * The full official list has not been supplied yet; add entries only from an official source.
+ * Only settlements currently part of Metsamor Community may be listed.
+ * The official list is not yet verified, so the directory is intentionally empty
+ * and the UI shows a labelled placeholder. Add entries only from an official source.
  */
-export const SETTLEMENTS: Settlement[] = [
-  { id: "metsamor", status: "draft", kind: "town", name: { hy: "Մեծամոր", en: "Metsamor", ru: "Мецамор" } },
-];
+export const SETTLEMENTS: Settlement[] = [];

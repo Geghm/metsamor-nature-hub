@@ -2,6 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { repository } from "@/lib/repository";
 import { useI18n } from "@/lib/i18n";
 import { DraftBadge } from "@/components/site";
+import { IMAGES } from "@/data/images";
 
 export const Route = createFileRoute("/treasures/$slug")({
   loader: async ({ params }) => {
@@ -27,6 +28,7 @@ function Page() {
   const { l, t } = useI18n();
   return (
     <article className="mx-auto max-w-3xl px-5 py-16">
+      <img src={IMAGES[x.image]} alt="" width={1024} height={768} className="mb-10 aspect-[16/9] w-full rounded-2xl object-cover shadow-card" />
       <Link to="/treasures" className="text-sm text-lake hover:underline">{t("back")}</Link>
       <div className="mt-8 flex items-center gap-3">
         <span className="text-xs uppercase tracking-wider text-lake">{l(x.category)}</span>
