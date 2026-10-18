@@ -12,8 +12,11 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { LanguageProvider } from "@/lib/i18n";
+import { LanguageProvider, useI18n } from "@/lib/i18n";
 import { SiteHeader, SiteFooter, IntroAnimation } from "@/components/site";
+import { SiteProvider, useSite } from "@/components/site-context";
+import { AdminGate } from "@/components/admin/gate";
+import { repository } from "@/lib/repository";
 
 function NotFoundComponent() {
   return (
@@ -76,7 +79,7 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  head: () => ({
+  head: ({ loaderData }) => ({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
@@ -90,12 +93,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", href: loaderData?.slots.favicon.media?.url || "/favicon.ico" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Noto+Sans+Armenian:wght@400;500;600&family=Noto+Sans:wght@400;500;600&family=Noto+Serif+Armenian:wght@500;600&family=Noto+Serif:wght@500;600&display=swap" },
     ],
   }),
+  loader: () => repository.getPublicSite(),
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
@@ -116,19 +120,39 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+function LiveContentNotice() {
+  const site = useSite();
+  const { t } = useI18n();
+  const router = useRouter();
+  if (!site.error) return null;
+  return (
+    <div role="alert" className="bg-draft px-5 py-3 text-center text-sm text-draft-foreground">
+      <p>{t("loadError")}</p>
+      <button type="button" className="mt-2 underline" onClick={() => void router.invalidate()}>
+        {t("retry")}
+      </button>
+    </div>
+  );
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const site = Route.useLoaderData();
 
   return (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <LanguageProvider>
-        <IntroAnimation />
-        <div className="flex min-h-screen flex-col">
-          <SiteHeader />
-          <main className="flex-1"><Outlet /></main>
-          <SiteFooter />
-        </div>
+        <SiteProvider value={site}>
+          <IntroAnimation />
+          <LiveContentNotice />
+          <div className="flex min-h-screen flex-col">
+            <SiteHeader />
+            <main className="flex-1"><Outlet /></main>
+            <SiteFooter />
+          </div>
+          <AdminGate />
+        </SiteProvider>
       </LanguageProvider>
     </QueryClientProvider>
   );

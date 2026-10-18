@@ -90,6 +90,31 @@ export const UI = {
   },
   rights: { hy: "Բովանդակությունը նախնական է։", en: "Content is preliminary.", ru: "Материалы предварительные." },
   notFound: { hy: "Էջը չի գտնվել", en: "Page not found", ru: "Страница не найдена" },
+  missingTranslation: {
+    hy: "Թարգմանությունը բացակայում է",
+    en: "Translation missing",
+    ru: "Перевод отсутствует",
+  },
+  loadError: {
+    hy: "Կայքի բովանդակությունը չհաջողվեց բեռնել։ Ցուցադրվում է ներկառուցված տեքստը։",
+    en: "Live content could not be loaded. Built-in text is shown instead.",
+    ru: "Не удалось загрузить материалы. Показан встроенный текст.",
+  },
+  retry: { hy: "Կրկին փորձել", en: "Try again", ru: "Повторить" },
+  source: { hy: "Աղբյուր", en: "Source", ru: "Источник" },
+  noFeatured: {
+    hy: "Դեռ չկան հրապարակված ընտրյալ գանձեր։",
+    en: "No featured treasures are published yet.",
+    ru: "Пока нет опубликованных избранных сокровищ.",
+  },
+  searchTreasures: { hy: "Որոնել գանձեր…", en: "Search treasures…", ru: "Поиск сокровищ…" },
+  allCategories: { hy: "Բոլոր թեմաները", en: "All topics", ru: "Все темы" },
+  settlementBack: { hy: "← Բոլոր բնակավայրերը", en: "← All settlements", ru: "← Все населённые пункты" },
+  unavailable: {
+    hy: "Այս էջը հասանելի չէ",
+    en: "This page is unavailable",
+    ru: "Эта страница недоступна",
+  },
 } satisfies Record<string, Localized>;
 
 export type UIKey = keyof typeof UI;

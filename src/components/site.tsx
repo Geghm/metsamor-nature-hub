@@ -1,6 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { LANGS, useI18n } from "@/lib/i18n";
+import { usePhrase, useSite } from "@/components/site-context";
+import { ContactAnchor } from "@/components/contact-links";
 
 /** Decorative butterfly motif (inspired by COP17, NOT the official logo). */
 export function Butterfly({ className = "", animated = true }: { className?: string; animated?: boolean }) {
@@ -91,7 +93,11 @@ export function SiteHeader() {
 
 export function SiteFooter() {
   const { t } = useI18n();
+  const site = useSite();
   const nav = useNav();
+  const footer = usePhrase("footerBody", "footer");
+  const note = usePhrase("aboutNote", "aboutNote");
+  const rights = usePhrase("rightsLine", "rights");
   return (
     <footer className="mt-28 bg-forest text-primary-foreground">
       <div className="mx-auto grid max-w-7xl gap-10 px-5 py-14 md:grid-cols-[2fr_1fr]">
@@ -100,8 +106,15 @@ export function SiteFooter() {
             <Butterfly className="h-10 w-12" animated={false} />
             <p className="font-display text-2xl">{t("brand")} — {t("tagline")}</p>
           </div>
-          <p className="mt-4 max-w-md text-sm opacity-80">{t("footer")}</p>
-          <p className="mt-2 text-xs opacity-60">{t("aboutNote")}</p>
+          <p className="mt-4 max-w-md text-sm opacity-80">{footer}</p>
+          {site.contactLinks.length > 0 && (
+            <ul className="mt-4 grid gap-1 text-sm">
+              {site.contactLinks.map((link) => (
+                <li key={link.id}><ContactAnchor link={link} className="opacity-90 hover:underline" /></li>
+              ))}
+            </ul>
+          )}
+          <p className="mt-2 text-xs opacity-60">{note}</p>
         </div>
         <ul className="grid gap-2 text-sm">
           {nav.map((n) => (
@@ -109,7 +122,7 @@ export function SiteFooter() {
           ))}
         </ul>
       </div>
-      <div className="border-t border-primary-foreground/15 py-4 text-center text-xs opacity-60">COP17 · {t("rights")}</div>
+      <div className="border-t border-primary-foreground/15 py-4 text-center text-xs opacity-60">COP17 · {rights}</div>
     </footer>
   );
 }

@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as SettlementsRouteImport } from './routes/settlements'
+import { Route as SettlementsSlugRouteImport } from './routes/settlements.$slug'
 import { Route as TreasuresIndexRouteImport } from './routes/treasures.index'
 import { Route as TreasuresSlugRouteImport } from './routes/treasures.$slug'
 
@@ -36,6 +37,11 @@ const SettlementsRoute = SettlementsRouteImport.update({
   path: '/settlements',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SettlementsSlugRoute = SettlementsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => SettlementsRoute,
+} as any)
 const TreasuresIndexRoute = TreasuresIndexRouteImport.update({
   id: '/treasures/',
   path: '/treasures/',
@@ -51,7 +57,8 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
-  '/settlements': typeof SettlementsRoute
+  '/settlements': typeof SettlementsRouteWithChildren
+  '/settlements/$slug': typeof SettlementsSlugRoute
   '/treasures/$slug': typeof TreasuresSlugRoute
   '/treasures/': typeof TreasuresIndexRoute
 }
@@ -59,7 +66,8 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
-  '/settlements': typeof SettlementsRoute
+  '/settlements': typeof SettlementsRouteWithChildren
+  '/settlements/$slug': typeof SettlementsSlugRoute
   '/treasures/$slug': typeof TreasuresSlugRoute
   '/treasures': typeof TreasuresIndexRoute
 }
@@ -68,7 +76,8 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
-  '/settlements': typeof SettlementsRoute
+  '/settlements': typeof SettlementsRouteWithChildren
+  '/settlements/$slug': typeof SettlementsSlugRoute
   '/treasures/$slug': typeof TreasuresSlugRoute
   '/treasures/': typeof TreasuresIndexRoute
 }
@@ -79,6 +88,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/settlements'
+    | '/settlements/$slug'
     | '/treasures/$slug'
     | '/treasures/'
   fileRoutesByTo: FileRoutesByTo
@@ -87,6 +97,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/settlements'
+    | '/settlements/$slug'
     | '/treasures/$slug'
     | '/treasures'
   id:
@@ -95,6 +106,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/settlements'
+    | '/settlements/$slug'
     | '/treasures/$slug'
     | '/treasures/'
   fileRoutesById: FileRoutesById
@@ -103,7 +115,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   ContactRoute: typeof ContactRoute
-  SettlementsRoute: typeof SettlementsRoute
+  SettlementsRoute: typeof SettlementsRouteWithChildren
   TreasuresSlugRoute: typeof TreasuresSlugRoute
   TreasuresIndexRoute: typeof TreasuresIndexRoute
 }
@@ -138,6 +150,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettlementsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/settlements/$slug': {
+      id: '/settlements/$slug'
+      path: '/$slug'
+      fullPath: '/settlements/$slug'
+      preLoaderRoute: typeof SettlementsSlugRouteImport
+      parentRoute: typeof SettlementsRoute
+    }
     '/treasures/': {
       id: '/treasures/'
       path: '/treasures'
@@ -155,11 +174,23 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface SettlementsRouteChildren {
+  SettlementsSlugRoute: typeof SettlementsSlugRoute
+}
+
+const SettlementsRouteChildren: SettlementsRouteChildren = {
+  SettlementsSlugRoute: SettlementsSlugRoute,
+}
+
+const SettlementsRouteWithChildren = SettlementsRoute._addFileChildren(
+  SettlementsRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   ContactRoute: ContactRoute,
-  SettlementsRoute: SettlementsRoute,
+  SettlementsRoute: SettlementsRouteWithChildren,
   TreasuresSlugRoute: TreasuresSlugRoute,
   TreasuresIndexRoute: TreasuresIndexRoute,
 }
